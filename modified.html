@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vedant Shendge — Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style> 
+
+</style>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<nav>
+  <a class="logo" id="cli-trigger">vs</a>
+  <ul>
+    <li><a href="#about">about</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#cp">cp</a></li>
+  </ul>
+  <a class="resume-btn" id="resume-trigger">Resume ↗</a>
+</nav>
+
+<!-- CLI Virtual File System Terminal -->
+<div id="cli-container">
+  <div id="cli-output">Welcome to VS_OS v1.0. Type 'help' for a list of commands.</div>
+  <div class="cli-line">
+    <span class="cli-prompt">guest@vedant:~$</span>
+    <input type="text" id="cli-input" autocomplete="off" spellcheck="false">
+  </div>
+</div>
+
+<div class="modal-overlay" id="resume-modal">
+  <button class="modal-close" id="resume-close">×</button>
+  <div id="resume-container">
+    <div id="resume-terminal"></div>
+    <iframe id="resume-frame" src=""></iframe>
+  </div>
+</div>
+
+<section id="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-content">
+    <p class="hero-eyebrow">// hi, my name is</p>
+    <h1 class="hero-name">Vedant Shendge.</h1>
+    <h2 class="hero-title">I build <span class="typed" id="typed-text"></span><span class="cursor"></span></h2>
+    <p class="hero-desc">3rd-year CS student at VIIT Pune. Technical Head @ ACM Student Chapter. I build full-stack applications and turn algorithms into real-world solutions.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" id="resume-btn-hero">Resume</a>
+      <a href="https://github.com/R3curs1on" target="_blank" class="btn-outline">GitHub ↗</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>scroll</span></div>
+</section>
+
+<section id="about" class="reveal">
+  <p class="section-label">01 / about_me</p>
+  <h2 class="section-title">Who I am</h2>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Hey! I'm Vedant — a <span>Computer Engineering student</span> at Vishwakarma Institute of Information Technology, Pune, currently in my 3rd year with a <strong>CGPA of 8.62</strong>.</p>
+      <p>I serve as <span>Technical Head at the ACM Student Chapter</span>, where I've organized a national 24-hour hackathon with 1000+ participants and directed competitive programming contests.</p>
+      <p>Outside of engineering, I'm pushing ratings on CodeForces and CodeChef, and exploring fractal mathematics and keyboard in my free time.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-card"><div class="stat-value">8.62</div><div class="stat-label">CGPA @ VIIT</div></div>
+      <div class="stat-card"><div class="stat-value">600+</div><div class="stat-label">LeetCode solved</div></div>
+      <div class="stat-card"><div class="stat-value">1733</div><div class="stat-label">Max LC rating</div></div>
+      <div class="stat-card"><div class="stat-value">1000+</div><div class="stat-label">Hackathon participants</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="experience" class="reveal">
+  <p class="section-label">02 / experience</p>
+  <h2 class="section-title">Where I've worked</h2>
+  <div class="exp-card">
+    <div class="exp-header">
+      <span class="exp-role">Technical Head</span>
+      <span class="exp-period">Oct 2025 — Present</span>
+    </div>
+    <div class="exp-company">ACM Student Chapter — Vishwakarma Institute of Technology, Pune</div>
+    <ul class="exp-bullets">
+      <li>Led and organized a national 24-hour hackathon with <strong>1000+ participants</strong>, managing all logistics and technical operations end-to-end.</li>
+      <li>Directed a competitive programming contest with <strong>200+ participants</strong> as part of ACM's technical initiatives.</li>
+      <li>Authored the complete algorithmic problem set for the ACM CodeSprint event in January 2026.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="projects" class="reveal">
+  <p class="section-label">03 / projects</p>
+  <h2 class="section-title">Things I've built</h2>
+  <div class="projects-grid">
+    <!-- EcoTrack -->
+    <div class="project-card featured">
+      <div class="diff-overlay">
+<span class="d-head">@@ -42,7 +42,8 @@ class EcosystemSimulator</span>
+   def detect_keystone(self, graph):
+<span class="d-sub">-      return simple_degree_centrality(graph)</span>
+<span class="d-add">+      # Apply Tarjan's bridge-finding algorithm</span>
+<span class="d-add">+      articulation_points = self._tarjan_dfs(graph)</span>
+<span class="d-add">+      return articulation_points</span>
+      </div>
+      <div class="content-z">
+        <div class="project-top">
+          <span class="project-icon">🌿</span>
+          <div class="project-links"><a href="https://github.com/R3curs1on/Eco_Track" target="_blank">GitHub ↗</a></div>
+        </div>
+        <div class="project-name">EcoTrack</div>
+        <p class="project-desc">Full-stack ecosystem simulator visualizing food-chains. Applied Tarjan's articulation-point detection to identify keystone species.</p>
+        <div class="project-tech"><span class="tech-tag">Vite</span><span class="tech-tag">Express</span><span class="tech-tag">Cytoscape.js</span></div>
+      </div>
+    </div>
+    <!-- Spam Detector -->
+    <div class="project-card">
+      <div class="diff-overlay">
+<span class="d-head">@@ -12,4 +12,7 @@ @app.post("/classify")</span>
+   async def classify_email(payload: EmailData):
+<span class="d-sub">-      result = model.predict([payload.text])</span>
+<span class="d-add">+      vectorized = tfidf_vectorizer.transform([payload.text])</span>
+<span class="d-add">+      proba = model.predict_proba(vectorized)[0]</span>
+<span class="d-add">+      return {"spam": proba[1] > 0.85}</span>
+      </div>
+      <div class="content-z">
+        <div class="project-top">
+          <span class="project-icon">📧</span>
+          <div class="project-links"><a href="https://github.com/R3curs1on/SpamOrHamEnronDataset" target="_blank">GitHub ↗</a></div>
+        </div>
+        <div class="project-name">Real-Time Spam Detector</div>
+        <p class="project-desc">Spam classifier integrated with live Gmail API for automated inbox scanning using Scikit-learn pipelines.</p>
+        <div class="project-tech"><span class="tech-tag">FastAPI</span><span class="tech-tag">Python</span><span class="tech-tag">Scikit-learn</span></div>
+      </div>
+    </div>
+    <!-- Search Engine -->
+    <div class="project-card">
+      <div class="diff-overlay">
+<span class="d-head">@@ -98,3 +98,5 @@ def rank_results(query, docs):</span>
+   for doc in docs:
+<span class="d-sub">-      score = count_matches(query, doc)</span>
+<span class="d-add">+      score = (bm25_tf * idf) + (0.3 * doc.pagerank)</span>
+      </div>
+      <div class="content-z">
+        <div class="project-top">
+          <span class="project-icon">🔍</span>
+          <div class="project-links"><a href="https://github.com/R3curs1on/MiniSearchEngine" target="_blank">GitHub ↗</a></div>
+        </div>
+        <div class="project-name">Mini Search Engine</div>
+        <p class="project-desc">End-to-end search pipeline with inverted index, BM25 scoring, and PageRank.</p>
+        <div class="project-tech"><span class="tech-tag">Python</span><span class="tech-tag">MySQL</span><span class="tech-tag">BM25</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="skills" class="reveal">
+  <canvas id="skillsCanvas"></canvas>
+  <div class="content-z" style="position:relative; z-index: 2;">
+    <p class="section-label">04 / skills</p>
+    <h2 class="section-title">Dependencies & Graph</h2>
+    <div class="skills-grid">
+      <div class="skills-category">
+        <div class="skills-category-title">languages</div>
+        <div class="skills-list">
+          <span class="skill-pill" data-skill="Java">Java</span>
+          <span class="skill-pill" data-skill="C++">C++</span>
+          <span class="skill-pill" data-skill="Python">Python</span>
+          <span class="skill-pill" data-skill="JavaScript">JavaScript</span>
+          <span class="skill-pill" data-skill="TypeScript">TypeScript</span>
+        </div>
+      </div>
+      <div class="skills-category">
+        <div class="skills-category-title">backend & tools</div>
+        <div class="skills-list">
+          <span class="skill-pill" data-skill="Node.js">Node.js</span>
+          <span class="skill-pill" data-skill="Express">Express</span>
+          <span class="skill-pill" data-skill="FastAPI">FastAPI</span>
+          <span class="skill-pill" data-skill="MongoDB">MongoDB</span>
+          <span class="skill-pill" data-skill="Linux">Linux Mint</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="cp" class="reveal">
+  <p class="section-label">05 / competitive_programming</p>
+  <h2 class="section-title">Algorithmic Ranks</h2>
+  <div class="cp-grid">
+
+    <a class="cp-card b-lc" href="https://leetcode.com/u/Vedant333/" target="_blank">
+      <div class="badge-wrapper"><div class="badge-3d"><div class="badge-face badge-front">🛡️</div><div class="badge-face badge-back">🛡️</div></div></div>
+      <div class="platform">LEETCODE</div>
+      <div class="cp-stat">Knight</div>
+      <div class="cp-sub"> 700+ Solved</div>
+      <div class="cp-highlight">Max Rating: 1866 </div>
+    </a>
+
+    <a class="cp-card b-cc" href="https://www.codechef.com/users/adorn_frost_13" target="_blank">
+      <div class="badge-wrapper"><div class="badge-3d"><div class="badge-face badge-front">★★★</div><div class="badge-face badge-back">★★★</div></div></div>
+      <div class="platform">CODECHEF</div>
+      <div class="cp-stat">3 Star (1633 Max) </div>
+      <div class="cp-sub">adorn_frost_13</div>
+    </a>
+
+    <a class="cp-card b-cf" href="https://codeforces.com/profile/vedant333" target="_blank">
+      <div class="badge-wrapper"><div class="badge-3d"><div class="badge-face badge-front">●</div><div class="badge-face badge-back">●</div></div></div>
+      <div class="platform">CODEFORCES</div>
+      <div class="cp-stat">Pupil (1305 Max) </div>
+      <div class="cp-sub">vedant333</div>
+    </a>
+
+  </div>
+  
+  <h3 style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent); margin-top: 5rem; text-align: center; letter-spacing: 0.15em;">// LIVE API TELEMETRY</h3>
+  <div class="telemetry-container">
+    <!-- 503 ERROR FIX: onerror attribute added to silently hide the image if the external API fails -->
+    <!-- <img class="telemetry-img" src="https://github-readme-stats.vercel.app/api?username=R3curs1on&bg_color=161f2e&title_color=64ffda&text_color=ccd6f6&icon_color=64ffda&hide_border=true&show_icons=true" alt="Live GitHub Stats" onerror="this.style.display='none'">
+    <img class="telemetry-img" src="https://leetcard.jacoblin.cool/Vedant333?theme=dark" alt="Live LeetCode Stats" onerror="this.style.display='none'"> -->
+
+<!-- GitHub Overview -->
+<img class="telemetry-img"     src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=R3curs1on&theme=github_dark"     alt="GitHub Overview"     onerror="this.style.display='none'">
+
+<!-- GitHub Heatmap -->
+<img class="telemetry-img"     src="https://ghchart.rshah.org/64ffda/R3curs1on"     alt="GitHub Heatmap"     onerror="this.style.display='none'">
+
+<!-- GitHub Stats -->
+<img class="telemetry-img"      src="https://github-readme-stats.vercel.app/api?username=R3curs1on&theme=github_dark&show_icons=true&hide_border=true"     alt="GitHub Stats"     onerror="this.style.display='none'">
+
+<!-- GitHub Streak -->
+<img class="telemetry-img"     src="https://streak-stats.demolab.com?user=R3curs1on&theme=github-dark&hide_border=true"     alt="GitHub Streak"     onerror="this.style.display='none'">
+
+<!-- LeetCode -->
+<img class="telemetry-img"     src="https://leetcard.jacoblin.cool/Vedant333?theme=dark&font=Karma&ext=contest"     alt="LeetCode Stats"     onerror="this.style.display='none'">
+
+<!-- Codeforces -->
+<img class="telemetry-img"     src="https://codeforces-readme-stats.vercel.app/api/card?username=vedant333&theme=github_dark"     alt="Codeforces Stats"     onerror="this.style.display='none'">
+
+<!-- Codeforces Rating Graph -->
+<img class="telemetry-img"     src="https://codeforces-readme-stats.vercel.app/api/chart?username=vedant333&theme=github_dark"     alt="Codeforces Rating Graph"     onerror="this.style.display='none'">
+
+</section>
+
+<div class="section-divider"></div>
+
+<section id="blog" class="reveal">
+  <p class="section-label">06 / writing</p>
+  <h2 class="section-title">Hobby & Open Source</h2>
+  <div class="blog-grid">
+    <a href="#" class="blog-card">
+      <div class="blog-date">Coming Soon</div>
+      <div class="blog-title">Rendering Fractals with GLSL Shaders</div>
+      <div class="blog-desc">An exploration into rendering Julia Sets and Mandelbrots directly on the GPU.</div>
+    </a>
+    <a href="https://github.com/R3curs1on" target="_blank" class="blog-card">
+      <div class="blog-date">May 2026</div>
+      <div class="blog-title">Open Source: Dynamic Vulnerability Scanners</div>
+      <div class="blog-desc">My PR adding split demo targets to an OS Web App Scanner.</div>
+    </a>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section id="contact" class="reveal">
+  <p class="section-label">07 / contact</p>
+  <h2 class="section-title">Get in touch</h2>
+  <div class="contact-links">
+    <a class="contact-link" href="mailto:xyz@gmail.com">
+      <svg class="contact-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      Email
+    </a>
+    <a class="contact-link" href="https://github.com/R3curs1on" target="_blank">
+      <svg class="contact-icon" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>Designed & Built by Vedant Shendge &nbsp;·&nbsp; 2026</p>
+</footer>
+<canvas id="sortCanvas"></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>

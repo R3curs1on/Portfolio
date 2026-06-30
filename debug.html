@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Debug</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="debug-body">
+  <main class="debug-shell">
+    <header class="debug-header">
+      <p class="debug-kicker">Hidden Route / Debug</p>
+      <h1 class="section-title">Portfolio runtime diagnostics</h1>
+      <p class="section-copy">Local browser diagnostics, recent site events, and the current portfolio release state.</p>
+    </header>
+
+    <section class="debug-grid">
+      <article class="debug-card">
+        <p class="project-label">Runtime</p>
+        <h3>Environment</h3>
+        <div id="runtime-info"></div>
+      </article>
+
+      <article class="debug-card">
+        <p class="project-label">Performance</p>
+        <h3>Memory and FPS</h3>
+        <div id="performance-info"></div>
+      </article>
+
+      <article class="debug-card">
+        <p class="project-label">Version</p>
+        <h3>Site status</h3>
+        <div id="version-info"></div>
+      </article>
+
+      <article class="debug-card">
+        <p class="project-label">Logs</p>
+        <h3>Recent local events</h3>
+        <div id="debug-logs"></div>
+      </article>
+
+      <article class="debug-card">
+        <p class="project-label">Changelog</p>
+        <h3>Recent releases</h3>
+        <ul>
+          <li>v2.5: live platform signals, repo cards, terminal commands, matrix mode, debug page.</li>
+          <li>v2.4: redesigned hero, timeline, certification cards, cleaner project case studies.</li>
+          <li>v2.3: achievement-first layout and flatter visual language.</li>
+        </ul>
+      </article>
+
+      <article class="debug-card">
+        <p class="project-label">Navigation</p>
+        <h3>Quick links</h3>
+        <ul>
+          <li><a href="modified.html">Open portfolio</a></li>
+          <li><a href="https://github.com/R3curs1on" target="_blank" rel="noreferrer">Open GitHub</a></li>
+          <li><a href="https://leetcode.com/u/Vedant333/" target="_blank" rel="noreferrer">Open LeetCode</a></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const runtimeInfo = document.getElementById("runtime-info");
+    const performanceInfo = document.getElementById("performance-info");
+    const versionInfo = document.getElementById("version-info");
+    const debugLogs = document.getElementById("debug-logs");
+
+    const runtimeLines = [
+      `User agent: ${navigator.userAgent}`,
+      `Language: ${navigator.language}`,
+      `Platform: ${navigator.platform || "unknown"}`,
+      `Online: ${navigator.onLine ? "yes" : "no"}`,
+      `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    ];
+
+    runtimeInfo.innerHTML = runtimeLines.map((line) => `<p class="mono-line">${line}</p>`).join("");
+
+    const memory = performance.memory
+      ? [
+          `JS heap used: ${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)} MB`,
+          `JS heap total: ${(performance.memory.totalJSHeapSize / 1048576).toFixed(2)} MB`,
+          `JS heap limit: ${(performance.memory.jsHeapSizeLimit / 1048576).toFixed(2)} MB`,
+        ]
+      : ["Memory API unavailable in this browser."];
+
+    let frameCount = 0;
+    let lastTime = performance.now();
+    const fpsLabel = document.createElement("p");
+    fpsLabel.className = "mono-line";
+    fpsLabel.textContent = "FPS: measuring...";
+
+    function measureFps(now) {
+      frameCount += 1;
+      if (now - lastTime >= 1000) {
+        fpsLabel.textContent = `FPS: ${frameCount}`;
+        frameCount = 0;
+        lastTime = now;
+      }
+      requestAnimationFrame(measureFps);
+    }
+
+    performanceInfo.innerHTML = memory.map((line) => `<p class="mono-line">${line}</p>`).join("");
+    performanceInfo.appendChild(fpsLabel);
+    requestAnimationFrame(measureFps);
+
+    const versionLines = [
+      "Current release: v2.5",
+      "Build style: HTML / CSS / JS only",
+      `Last opened: ${new Date().toLocaleString()}`,
+      "Hidden route: /debug",
+    ];
+    versionInfo.innerHTML = versionLines.map((line) => `<p class="mono-line">${line}</p>`).join("");
+
+    const logs = JSON.parse(localStorage.getItem("portfolio-debug-log") || "[]");
+    if (logs.length === 0) {
+      debugLogs.innerHTML = '<p class="mono-line">No logs stored yet.</p>';
+    } else {
+      debugLogs.innerHTML = logs
+        .slice(0, 12)
+        .map((entry) => `<p class="mono-line">[${new Date(entry.at).toLocaleTimeString()}] ${entry.event} ${JSON.stringify(entry.details)}</p>`)
+        .join("");
+    }
+  </script>
+</body>
+</html>

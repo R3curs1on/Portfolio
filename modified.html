@@ -10,13 +10,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+
   <nav class="site-nav">
     <a href="#hero" class="logo">VS</a>
     <ul class="nav-links">
       <li><a href="#achievements">Achievements</a></li>
-      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#signals">Signals</a></li>
+      <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#terminal">Terminal</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="nav-cta" id="resume-trigger" type="button">Resume</button>
@@ -27,11 +30,9 @@
       <canvas id="heroCanvas" aria-hidden="true"></canvas>
       <div class="hero-shell">
         <div class="hero-copy">
-          <p class="section-kicker">Portfolio v2 / 2026</p>
+          <p class="section-kicker">Portfolio v2.5 / Interactive Build</p>
           <p class="hero-intro">Computer Engineering / VIIT Pune</p>
-          <h1 class="hero-heading">
-            Vedant Shendge
-          </h1>
+          <h1 class="hero-heading">Vedant Shendge</h1>
           <div class="hero-roles" aria-label="Roles">
             <span class="role-line is-active">Competitive Programmer.</span>
             <span class="role-line">Full Stack Developer.</span>
@@ -42,7 +43,7 @@
           </p>
           <div class="hero-actions">
             <button class="button button-primary" id="resume-btn-hero" type="button">Resume</button>
-            <a class="button button-secondary" href="#projects">Projects</a>
+            <a class="button button-secondary" href="#signals">Live Data</a>
             <a class="button button-ghost" href="https://github.com/R3curs1on" target="_blank" rel="noreferrer">GitHub</a>
           </div>
         </div>
@@ -72,7 +73,7 @@
       <div class="section-head">
         <p class="section-kicker">Phase 1 / Highlights</p>
         <h2 class="section-title">Achievements up front</h2>
-        <p class="section-copy">The first screen should answer why you are interview-worthy. This section does that without making recruiters hunt through the about paragraph.</p>
+        <p class="section-copy">The landing view now says why you are interview-worthy before a recruiter scrolls into detail.</p>
       </div>
 
       <div class="achievement-grid">
@@ -106,8 +107,8 @@
 
     <section id="timeline" class="section section-muted reveal">
       <div class="section-head">
-        <p class="section-kicker">Growth / Timeline</p>
-        <h2 class="section-title">A simple progression line</h2>
+        <p class="section-kicker">Progress / Timeline</p>
+        <h2 class="section-title">A clearer progression line</h2>
       </div>
 
       <div class="timeline">
@@ -142,28 +143,199 @@
       </div>
     </section>
 
+    <section id="signals" class="section reveal">
+      <div class="section-head">
+        <p class="section-kicker">Phase 2 / Live Signals</p>
+        <h2 class="section-title">Live platform telemetry, without image cards</h2>
+        <p class="section-copy">GitHub and Codeforces are fetched live in the browser. LeetCode uses a runtime fetch with a graceful fallback because public browser access is less reliable.</p>
+      </div>
+
+      <div class="signal-grid">
+        <article class="signal-card" id="github-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">GitHub</p>
+              <h3>Open-source activity</h3>
+            </div>
+            <a href="https://github.com/R3curs1on" target="_blank" rel="noreferrer">Profile</a>
+          </div>
+          <div class="signal-stats" id="github-summary">
+            <div class="signal-stat">
+              <span class="signal-key">Repositories</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Followers</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Stars</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Recent commits</span>
+              <strong>...</strong>
+            </div>
+          </div>
+          <div class="micro-chart" id="github-commit-chart" aria-label="GitHub activity chart"></div>
+          <ul class="signal-list" id="github-activity">
+            <li>Loading recent GitHub activity...</li>
+          </ul>
+        </article>
+
+        <article class="signal-card" id="leetcode-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">LeetCode</p>
+              <h3>Practice snapshot</h3>
+            </div>
+            <a href="https://leetcode.com/u/Vedant333/" target="_blank" rel="noreferrer">Profile</a>
+          </div>
+          <div class="signal-stats" id="leetcode-summary">
+            <div class="signal-stat">
+              <span class="signal-key">Solved</span>
+              <strong>700+</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Contest rating</span>
+              <strong>1866</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Status</span>
+              <strong>Snapshot</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Streak</span>
+              <strong>Active</strong>
+            </div>
+          </div>
+          <div class="heatmap" id="leetcode-heatmap" aria-label="LeetCode heatmap"></div>
+          <p class="signal-note" id="leetcode-note">Attempting live profile fetch. Falls back to a local snapshot if the provider blocks cross-origin requests.</p>
+        </article>
+
+        <article class="signal-card" id="codeforces-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">Codeforces</p>
+              <h3>Contest telemetry</h3>
+            </div>
+            <a href="https://codeforces.com/profile/vedant333" target="_blank" rel="noreferrer">Profile</a>
+          </div>
+          <div class="signal-stats" id="codeforces-summary">
+            <div class="signal-stat">
+              <span class="signal-key">Current rating</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Max rating</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Rank</span>
+              <strong>...</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Contests</span>
+              <strong>...</strong>
+            </div>
+          </div>
+          <ul class="signal-list" id="codeforces-contests">
+            <li>Loading Codeforces contests...</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" class="section section-muted reveal">
+      <div class="section-head">
+        <p class="section-kicker">Phase 2 / Skill Graph</p>
+        <h2 class="section-title">Click a skill, trace the stack, filter the work</h2>
+        <p class="section-copy">The graph is simple on purpose: pick a technology and the projects below highlight where it shows up.</p>
+      </div>
+
+      <div class="skill-shell">
+        <div class="skill-graph">
+          <button class="skill-node is-active" type="button" data-skill="all">All</button>
+          <div class="skill-link"></div>
+          <button class="skill-node" type="button" data-skill="MongoDB">MongoDB</button>
+          <div class="skill-link"></div>
+          <button class="skill-node" type="button" data-skill="Express">Express</button>
+          <div class="skill-link"></div>
+          <button class="skill-node" type="button" data-skill="Node.js">Node.js</button>
+          <div class="skill-link"></div>
+          <button class="skill-node" type="button" data-skill="TypeScript">TypeScript</button>
+        </div>
+
+        <div class="skill-legend">
+          <p class="legend-status" id="skill-filter-status">Showing all projects and repos.</p>
+          <div class="skill-pills">
+            <button class="skill-chip" type="button" data-skill="Python">Python</button>
+            <button class="skill-chip" type="button" data-skill="FastAPI">FastAPI</button>
+            <button class="skill-chip" type="button" data-skill="Scikit-learn">Scikit-learn</button>
+            <button class="skill-chip" type="button" data-skill="Express">Express</button>
+            <button class="skill-chip" type="button" data-skill="Cytoscape.js">Cytoscape.js</button>
+            <button class="skill-chip" type="button" data-skill="BM25">BM25</button>
+            <button class="skill-chip" type="button" data-skill="MySQL">MySQL</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="open-source" class="section reveal">
+      <div class="section-head">
+        <p class="section-kicker">Phase 2 / Open Source</p>
+        <h2 class="section-title">Repository cards sourced from real GitHub data</h2>
+      </div>
+
+      <div class="repo-grid" id="repo-grid">
+        <article class="repo-card">
+          <p>Loading repositories...</p>
+        </article>
+      </div>
+    </section>
+
     <section id="projects" class="section reveal">
       <div class="section-head">
-        <p class="section-kicker">Work / Case Studies</p>
-        <h2 class="section-title">Projects with decision-making visible</h2>
-        <p class="section-copy">The cards now behave more like lightweight case studies. They surface architecture, algorithmic choices, and lessons, instead of stopping at a GitHub link.</p>
+        <p class="section-kicker">Phase 1 + 2 / Case Studies</p>
+        <h2 class="section-title">Projects with architecture and engineering intent visible</h2>
+        <p class="section-copy">Each project card now carries an inline architecture diagram so the stack reads as a system, not a badge list.</p>
       </div>
 
       <div class="project-grid">
-        <article class="project-card">
+        <article class="project-card" data-skills="Express,Cytoscape.js,Graph Algorithms,MongoDB,Node.js">
           <div class="project-header">
             <div>
               <p class="project-label">Featured Project</p>
               <h3>EcoTrack</h3>
             </div>
-            <a href="https://github.com/R3curs1on/Eco_Track" target="_blank" rel="noreferrer">GitHub</a>
+            <div class="project-actions">
+              <a href="https://github.com/R3curs1on/Eco_Track" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
           </div>
           <p class="project-summary">Ecosystem simulator that visualizes food chains and identifies keystone species through graph analysis.</p>
           <div class="project-stack">
-            <span>Vite</span>
+            <span>Node.js</span>
             <span>Express</span>
+            <span>MongoDB</span>
             <span>Cytoscape.js</span>
             <span>Graph Algorithms</span>
+          </div>
+          <div class="architecture-diagram">
+            <svg viewBox="0 0 360 92" role="img" aria-label="EcoTrack architecture diagram">
+              <g>
+                <rect x="0" y="18" width="78" height="36" rx="18"></rect>
+                <text x="39" y="41" text-anchor="middle">Vite UI</text>
+                <rect x="96" y="18" width="88" height="36" rx="18"></rect>
+                <text x="140" y="41" text-anchor="middle">Express API</text>
+                <rect x="202" y="18" width="74" height="36" rx="18"></rect>
+                <text x="239" y="41" text-anchor="middle">Tarjan</text>
+                <rect x="294" y="18" width="66" height="36" rx="18"></rect>
+                <text x="327" y="41" text-anchor="middle">Mongo</text>
+                <path d="M78 36H96"></path>
+                <path d="M184 36H202"></path>
+                <path d="M276 36H294"></path>
+              </g>
+            </svg>
           </div>
           <div class="case-study-grid">
             <section>
@@ -188,25 +360,44 @@
             </section>
             <section>
               <h4>Demo</h4>
-              <p>Structured to support a richer live demo and deeper case study page in the next iteration.</p>
+              <p>Structured for a richer case study page and eventual live simulation walkthrough.</p>
             </section>
           </div>
         </article>
 
-        <article class="project-card">
+        <article class="project-card" data-skills="Python,FastAPI,Scikit-learn,Gmail API">
           <div class="project-header">
             <div>
               <p class="project-label">ML System</p>
               <h3>Real-Time Spam Detector</h3>
             </div>
-            <a href="https://github.com/R3curs1on/SpamOrHamEnronDataset" target="_blank" rel="noreferrer">GitHub</a>
+            <div class="project-actions">
+              <a href="https://github.com/R3curs1on/SpamOrHamEnronDataset" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
           </div>
           <p class="project-summary">A spam classification pipeline that integrates email analysis with practical API-driven automation.</p>
           <div class="project-stack">
-            <span>FastAPI</span>
             <span>Python</span>
+            <span>FastAPI</span>
             <span>Scikit-learn</span>
             <span>Gmail API</span>
+          </div>
+          <div class="architecture-diagram">
+            <svg viewBox="0 0 360 92" role="img" aria-label="Spam detector architecture diagram">
+              <g>
+                <rect x="0" y="18" width="78" height="36" rx="18"></rect>
+                <text x="39" y="41" text-anchor="middle">Inbox</text>
+                <rect x="96" y="18" width="82" height="36" rx="18"></rect>
+                <text x="137" y="41" text-anchor="middle">FastAPI</text>
+                <rect x="196" y="18" width="76" height="36" rx="18"></rect>
+                <text x="234" y="41" text-anchor="middle">TF-IDF</text>
+                <rect x="290" y="18" width="70" height="36" rx="18"></rect>
+                <text x="325" y="41" text-anchor="middle">Model</text>
+                <path d="M78 36H96"></path>
+                <path d="M178 36H196"></path>
+                <path d="M272 36H290"></path>
+              </g>
+            </svg>
           </div>
           <div class="case-study-grid">
             <section>
@@ -231,18 +422,20 @@
             </section>
             <section>
               <h4>Demo</h4>
-              <p>Ready for a future live flow showing classification input, confidence, and inbox action.</p>
+              <p>Ready for a future flow showing classification, confidence, and inbox action together.</p>
             </section>
           </div>
         </article>
 
-        <article class="project-card">
+        <article class="project-card" data-skills="Python,MySQL,BM25,PageRank">
           <div class="project-header">
             <div>
               <p class="project-label">Search Infra</p>
               <h3>Mini Search Engine</h3>
             </div>
-            <a href="https://github.com/R3curs1on/MiniSearchEngine" target="_blank" rel="noreferrer">GitHub</a>
+            <div class="project-actions">
+              <a href="https://github.com/R3curs1on/MiniSearchEngine" target="_blank" rel="noreferrer">GitHub</a>
+            </div>
           </div>
           <p class="project-summary">A ranking pipeline combining inverted indexing, BM25 scoring, and graph-based relevance signals.</p>
           <div class="project-stack">
@@ -250,6 +443,23 @@
             <span>MySQL</span>
             <span>BM25</span>
             <span>PageRank</span>
+          </div>
+          <div class="architecture-diagram">
+            <svg viewBox="0 0 360 92" role="img" aria-label="Search engine architecture diagram">
+              <g>
+                <rect x="0" y="18" width="70" height="36" rx="18"></rect>
+                <text x="35" y="41" text-anchor="middle">Crawler</text>
+                <rect x="88" y="18" width="70" height="36" rx="18"></rect>
+                <text x="123" y="41" text-anchor="middle">Index</text>
+                <rect x="176" y="18" width="74" height="36" rx="18"></rect>
+                <text x="213" y="41" text-anchor="middle">BM25</text>
+                <rect x="268" y="18" width="92" height="36" rx="18"></rect>
+                <text x="314" y="41" text-anchor="middle">PageRank + DB</text>
+                <path d="M70 36H88"></path>
+                <path d="M158 36H176"></path>
+                <path d="M250 36H268"></path>
+              </g>
+            </svg>
           </div>
           <div class="case-study-grid">
             <section>
@@ -274,10 +484,83 @@
             </section>
             <section>
               <h4>Demo</h4>
-              <p>Ideal next step is a small query UI that makes ranking differences immediately visible.</p>
+              <p>Ideal next step is a query UI that makes ranking differences immediately visible.</p>
             </section>
           </div>
         </article>
+      </div>
+    </section>
+
+    <section id="shipping" class="section section-muted reveal">
+      <div class="section-head">
+        <p class="section-kicker">Phase 3 / Shipping Log</p>
+        <h2 class="section-title">Commit motion and deployment history</h2>
+      </div>
+
+      <div class="shipping-grid">
+        <article class="ship-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">Commit Pulse</p>
+              <h3>Recent Git activity</h3>
+            </div>
+          </div>
+          <div class="micro-chart chart-tall" id="commit-timeline"></div>
+        </article>
+
+        <article class="ship-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">Deployments</p>
+              <h3>Portfolio release history</h3>
+            </div>
+          </div>
+          <div class="deploy-list">
+            <article class="deploy-item">
+              <span>v2.5</span>
+              <p>Added live signals, terminal commands, repo feed, and debug route.</p>
+            </article>
+            <article class="deploy-item">
+              <span>v2.4</span>
+              <p>Added hero redesign, timeline, certifications, and case-study layout.</p>
+            </article>
+            <article class="deploy-item">
+              <span>v2.3</span>
+              <p>Restructured achievements and reduced motion-heavy sections.</p>
+            </article>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="terminal" class="section reveal">
+      <div class="section-head">
+        <p class="section-kicker">Phase 3 / Terminal</p>
+        <h2 class="section-title">A real command surface, not a fake shell</h2>
+        <p class="section-copy">Supports command history, tab completion, and profile shortcuts. Try `help`, `projects`, `resume`, `coffee`, `ascii`, `matrix`, or `debug`.</p>
+      </div>
+
+      <div class="terminal-shell">
+        <div class="terminal-topbar">
+          <span></span>
+          <span></span>
+          <span></span>
+          <p>portfolio://terminal</p>
+        </div>
+        <div class="terminal-output" id="terminal-output"></div>
+        <label class="terminal-input-row" for="terminal-input">
+          <span class="terminal-prompt">vedant@portfolio:~$</span>
+          <input id="terminal-input" class="terminal-input" type="text" autocomplete="off" spellcheck="false">
+        </label>
+        <div class="terminal-shortcuts">
+          <button type="button" class="terminal-shortcut" data-command="help">help</button>
+          <button type="button" class="terminal-shortcut" data-command="tree">tree</button>
+          <button type="button" class="terminal-shortcut" data-command="projects">projects</button>
+          <button type="button" class="terminal-shortcut" data-command="github">github</button>
+          <button type="button" class="terminal-shortcut" data-command="leetcode">leetcode</button>
+          <button type="button" class="terminal-shortcut" data-command="coffee">coffee</button>
+          <button type="button" class="terminal-shortcut" data-command="debug">debug</button>
+        </div>
       </div>
     </section>
 
@@ -291,7 +574,7 @@
         <article class="cert-card">
           <p class="cert-provider">AWS</p>
           <h3>Cloud Credential</h3>
-          <p>Add the exact certification title and issue date here once you want the production version locked in.</p>
+          <p>Add the exact certification title and issue date here when you want the production version locked in.</p>
           <a href="#" aria-disabled="true">Verify</a>
         </article>
         <article class="cert-card">
@@ -313,7 +596,7 @@
       <div class="section-head">
         <p class="section-kicker">Connect / Reach out</p>
         <h2 class="section-title">Available for internships and engineering conversations</h2>
-        <p class="section-copy">The closing section stays short. The portfolio already did the persuasion work earlier.</p>
+        <p class="section-copy">The close stays short. The rest of the site now carries the evidence.</p>
       </div>
 
       <div class="contact-panel">
@@ -325,7 +608,7 @@
   </main>
 
   <footer class="site-footer">
-    <p>Vedant Shendge / Portfolio / 2026</p>
+    <p>Vedant Shendge / Portfolio / 2026 / <a href="debug.html">debug</a></p>
   </footer>
 
   <div class="modal-overlay" id="resume-modal" aria-hidden="true">

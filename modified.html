@@ -1,3 +1,4 @@
+<!-- modified.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +12,7 @@
 </head>
 <body>
   <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+  <canvas id="fractalCanvas" aria-hidden="true"></canvas>
 
   <nav class="site-nav">
     <a href="#hero" class="logo">VS</a>
@@ -150,7 +152,7 @@
         <p class="section-copy">GitHub and Codeforces are fetched live in the browser. LeetCode uses a runtime fetch with a graceful fallback because public browser access is less reliable.</p>
       </div>
 
-      <div class="signal-grid">
+      <div class="signal-grid signal-grid-rich">
         <article class="signal-card" id="github-card">
           <div class="signal-head">
             <div>
@@ -178,6 +180,10 @@
             </div>
           </div>
           <div class="micro-chart" id="github-commit-chart" aria-label="GitHub activity chart"></div>
+          <div class="signal-subsection">
+            <p class="subsection-label">Contribution Heatmap</p>
+            <div class="heatmap heatmap-wide" id="github-heatmap" aria-label="GitHub heatmap"></div>
+          </div>
           <ul class="signal-list" id="github-activity">
             <li>Loading recent GitHub activity...</li>
           </ul>
@@ -209,6 +215,24 @@
               <strong>Active</strong>
             </div>
           </div>
+          <div class="difficulty-breakdown" id="leetcode-difficulty">
+            <div class="difficulty-row">
+              <span>Easy</span>
+              <strong>...</strong>
+            </div>
+            <div class="difficulty-row">
+              <span>Medium</span>
+              <strong>...</strong>
+            </div>
+            <div class="difficulty-row">
+              <span>Hard</span>
+              <strong>...</strong>
+            </div>
+          </div>
+          <div class="signal-subsection">
+            <p class="subsection-label">Rating Graph</p>
+            <div class="line-chart" id="leetcode-rating-chart" aria-label="LeetCode rating graph"></div>
+          </div>
           <div class="heatmap" id="leetcode-heatmap" aria-label="LeetCode heatmap"></div>
           <p class="signal-note" id="leetcode-note">Attempting live profile fetch. Falls back to a local snapshot if the provider blocks cross-origin requests.</p>
         </article>
@@ -239,8 +263,51 @@
               <strong>...</strong>
             </div>
           </div>
+          <div class="signal-subsection">
+            <p class="subsection-label">Rating Graph</p>
+            <div class="line-chart" id="codeforces-rating-chart" aria-label="Codeforces rating graph"></div>
+          </div>
+          <div class="signal-subsection">
+            <p class="subsection-label">Contest Heatmap</p>
+            <div class="heatmap heatmap-wide" id="codeforces-heatmap" aria-label="Codeforces heatmap"></div>
+          </div>
           <ul class="signal-list" id="codeforces-contests">
             <li>Loading Codeforces contests...</li>
+          </ul>
+        </article>
+
+        <article class="signal-card" id="codechef-card">
+          <div class="signal-head">
+            <div>
+              <p class="signal-provider">CodeChef</p>
+              <h3>3-star contest track</h3>
+            </div>
+            <a href="https://www.codechef.com/users/adorn_frost_13" target="_blank" rel="noreferrer">Profile</a>
+          </div>
+          <div class="signal-stats" id="codechef-summary">
+            <div class="signal-stat">
+              <span class="signal-key">Current tier</span>
+              <strong>3 Star</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Max rating</span>
+              <strong>1633</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Status</span>
+              <strong>Snapshot</strong>
+            </div>
+            <div class="signal-stat">
+              <span class="signal-key">Handle</span>
+              <strong>adorn_frost_13</strong>
+            </div>
+          </div>
+          <div class="signal-subsection">
+            <p class="subsection-label">Contest Graph</p>
+            <div class="line-chart" id="codechef-rating-chart" aria-label="CodeChef rating graph"></div>
+          </div>
+          <ul class="signal-list" id="codechef-contests">
+            <li>CodeChef public API is not reliably available from the browser. Showing curated contest history snapshot.</li>
           </ul>
         </article>
       </div>
@@ -498,24 +565,31 @@
       </div>
 
       <div class="shipping-grid">
-        <article class="ship-card">
+        <article class="ship-card ship-card-spotlight">
           <div class="signal-head">
             <div>
               <p class="signal-provider">Commit Pulse</p>
-              <h3>Recent Git activity</h3>
+              <h3>Release motion</h3>
             </div>
           </div>
+          <div class="ship-motion" id="ship-motion"></div>
           <div class="micro-chart chart-tall" id="commit-timeline"></div>
+          <div class="release-tags" id="release-tags">
+            <span>hero</span>
+            <span>signals</span>
+            <span>terminal</span>
+            <span>debug</span>
+          </div>
         </article>
 
         <article class="ship-card">
           <div class="signal-head">
             <div>
               <p class="signal-provider">Deployments</p>
-              <h3>Portfolio release history</h3>
+              <h3>Version history</h3>
             </div>
           </div>
-          <div class="deploy-list">
+          <div class="deploy-list deploy-list-rich" id="version-history">
             <article class="deploy-item">
               <span>v2.5</span>
               <p>Added live signals, terminal commands, repo feed, and debug route.</p>

@@ -18,18 +18,36 @@ const fallbackData = {
       0, 1, 1, 3, 4, 3, 2, 1, 0, 1, 2, 1, 3, 4,
       2, 1, 0, 1, 2, 2, 4, 3, 1, 1, 0, 2, 3, 4,
     ],
+    difficulty: {
+      Easy: 270,
+      Medium: 360,
+      Hard: 70,
+    },
+    ratingSeries: [1520, 1588, 1640, 1705, 1760, 1814, 1866],
+  },
+  codechef: {
+    ratingSeries: [1420, 1488, 1536, 1572, 1601, 1633],
+    contests: [
+      "Starters track: peaked at 1633 rating.",
+      "Maintained 3-star competitive programming profile.",
+      "Handle: adorn_frost_13",
+    ],
   },
 };
 
 function logDebug(event, details) {
-  const raw = localStorage.getItem("portfolio-debug-log");
-  const entries = raw ? JSON.parse(raw) : [];
-  entries.unshift({
-    at: new Date().toISOString(),
-    event,
-    details,
-  });
-  localStorage.setItem("portfolio-debug-log", JSON.stringify(entries.slice(0, 80)));
+  try {
+    const raw = localStorage.getItem("portfolio-debug-log");
+    const entries = raw ? JSON.parse(raw) : [];
+    entries.unshift({
+      at: new Date().toISOString(),
+      event,
+      details,
+    });
+    localStorage.setItem("portfolio-debug-log", JSON.stringify(entries.slice(0, 80)));
+  } catch (error) {
+    // Diagnostics are useful but should never break the portfolio.
+  }
 }
 
 logDebug("page_load", { page: "modified.html" });
@@ -112,6 +130,9 @@ document.querySelectorAll(".counter").forEach((counter) => {
 const nav = document.querySelector(".site-nav");
 
 function syncNavState() {
+  if (!nav) {
+    return;
+  }
   nav.classList.toggle("is-condensed", window.scrollY > 24);
 }
 
@@ -127,6 +148,10 @@ const resumeOpeners = [
 const resumeCloser = document.getElementById("resume-close");
 
 function openResume() {
+  if (!resumeFrame || !resumeModal) {
+    window.open(profile.resumeUrl.replace("/preview", "/view"), "_blank", "noopener");
+    return;
+  }
   resumeFrame.src = profile.resumeUrl;
   resumeModal.classList.add("is-open");
   resumeModal.setAttribute("aria-hidden", "false");
@@ -135,6 +160,9 @@ function openResume() {
 }
 
 function closeResume() {
+  if (!resumeFrame || !resumeModal) {
+    return;
+  }
   resumeFrame.src = "";
   resumeModal.classList.remove("is-open");
   resumeModal.setAttribute("aria-hidden", "true");
@@ -161,14 +189,14 @@ if (resumeModal) {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && resumeModal.classList.contains("is-open")) {
+  if (event.key === "Escape" && resumeModal && resumeModal.classList.contains("is-open")) {
     closeResume();
   }
 });
 
 const heroCanvas = document.getElementById("heroCanvas");
 const heroSection = document.getElementById("hero");
-const heroContext = heroCanvas.getContext("2d");
+const heroContext = heroCanvas ? heroCanvas.getContext("2d") : null;
 let particles = [];
 let heroWidth = 0;
 let heroHeight = 0;
@@ -185,6 +213,9 @@ function buildParticles() {
 }
 
 function resizeHeroCanvas() {
+  if (!heroCanvas || !heroSection || !heroContext) {
+    return;
+  }
   const bounds = heroSection.getBoundingClientRect();
   heroWidth = bounds.width;
   heroHeight = bounds.height;
@@ -197,6 +228,9 @@ function resizeHeroCanvas() {
 }
 
 function drawHeroBackground() {
+  if (!heroContext) {
+    return;
+  }
   heroContext.clearRect(0, 0, heroWidth, heroHeight);
 
   particles.forEach((particle) => {
@@ -253,20 +287,22 @@ function drawHeroBackground() {
   requestAnimationFrame(drawHeroBackground);
 }
 
-heroSection.addEventListener("pointermove", (event) => {
-  const rect = heroSection.getBoundingClientRect();
-  pointer.x = event.clientX - rect.left;
-  pointer.y = event.clientY - rect.top;
-});
+if (heroSection && heroCanvas && heroContext) {
+  heroSection.addEventListener("pointermove", (event) => {
+    const rect = heroSection.getBoundingClientRect();
+    pointer.x = event.clientX - rect.left;
+    pointer.y = event.clientY - rect.top;
+  });
 
-heroSection.addEventListener("pointerleave", () => {
-  pointer.x = null;
-  pointer.y = null;
-});
+  heroSection.addEventListener("pointerleave", () => {
+    pointer.x = null;
+    pointer.y = null;
+  });
 
-window.addEventListener("resize", resizeHeroCanvas);
-resizeHeroCanvas();
-drawHeroBackground();
+  window.addEventListener("resize", resizeHeroCanvas);
+  resizeHeroCanvas();
+  drawHeroBackground();
+}
 
 function formatNumber(value) {
   if (typeof value !== "number") {
@@ -276,6 +312,9 @@ function formatNumber(value) {
 }
 
 function renderStats(container, stats) {
+  if (!container) {
+    return;
+  }
   container.innerHTML = stats
     .map(
       (stat) => `
@@ -289,6 +328,9 @@ function renderStats(container, stats) {
 }
 
 function renderChart(container, values) {
+  if (!container) {
+    return;
+  }
   container.innerHTML = values
     .map((value) => {
       const height = Math.max(10, value * 8);
@@ -298,13 +340,73 @@ function renderChart(container, values) {
 }
 
 function renderHeatmap(container, values) {
+  if (!container) {
+    return;
+  }
   container.innerHTML = values
     .map((value) => `<span class="heat-cell level-${value}"></span>`)
     .join("");
 }
 
 function renderList(container, items) {
+  if (!container) {
+    return;
+  }
   container.innerHTML = items.map((item) => `<li>${item}</li>`).join("");
+}
+
+function renderLineChart(container, values) {
+  if (!container || values.length === 0) {
+    return;
+  }
+
+  const width = 420;
+  const height = 160;
+  const padding = 18;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = Math.max(1, max - min);
+  const points = values.map((value, index) => {
+    const x = padding + (index / Math.max(1, values.length - 1)) * (width - padding * 2);
+    const y = height - padding - ((value - min) / range) * (height - padding * 2);
+    return { x, y, value };
+  });
+  const line = points.map((point) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(" ");
+  const area = `${padding},${height - padding} ${line} ${width - padding},${height - padding}`;
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Rating trend from ${min} to ${max}">
+      <polygon class="chart-area" points="${area}"></polygon>
+      <polyline class="chart-line" points="${line}"></polyline>
+      ${points
+        .map((point) => `<circle class="chart-dot" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="3"><title>${point.value}</title></circle>`)
+        .join("")}
+    </svg>
+  `;
+}
+
+function renderDifficultyBreakdown(container, values) {
+  if (!container) {
+    return;
+  }
+
+  container.innerHTML = Object.entries(values)
+    .map(
+      ([label, count]) => `
+        <div class="difficulty-row">
+          <span>${label}</span>
+          <strong>${formatNumber(count)}</strong>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function toHeatLevel(value, max) {
+  if (value <= 0 || max <= 0) {
+    return 0;
+  }
+  return Math.min(4, Math.max(1, Math.ceil((value / max) * 4)));
 }
 
 async function fetchJson(url, options) {
@@ -337,12 +439,33 @@ async function loadGitHubData() {
     const chartValues = pushEvents.slice(0, 12).reverse().map((event) => Math.max(1, (event.payload.commits || []).length));
     renderChart(document.getElementById("github-commit-chart"), chartValues.length > 0 ? chartValues : [1, 2, 1, 3, 2, 4, 3, 1]);
 
+    const eventBuckets = new Map();
+    events.forEach((event) => {
+      const key = new Date(event.created_at).toISOString().slice(0, 10);
+      eventBuckets.set(key, (eventBuckets.get(key) || 0) + 1);
+    });
+    const githubHeatValues = Array.from({ length: 60 }, (_, offset) => {
+      const day = new Date();
+      day.setDate(day.getDate() - (59 - offset));
+      return eventBuckets.get(day.toISOString().slice(0, 10)) || 0;
+    });
+    const githubHeatMax = Math.max(...githubHeatValues, 1);
+    renderHeatmap(
+      document.getElementById("github-heatmap"),
+      githubHeatValues.map((value) => toHeatLevel(value, githubHeatMax))
+    );
+
     const activityLines = pushEvents.slice(0, 4).map((event) => {
       const repoName = event.repo.name.split("/")[1];
       const commitCount = (event.payload.commits || []).length;
       return `${repoName}: ${commitCount} commit${commitCount === 1 ? "" : "s"} in latest push`;
     });
-    renderList(document.getElementById("github-activity"), activityLines);
+    renderList(
+      document.getElementById("github-activity"),
+      activityLines.length > 0
+        ? activityLines
+        : ["No recent public push events returned by GitHub. Repository data still loaded live."]
+    );
 
     const topRepos = repos
       .filter((repo) => !repo.fork)
@@ -354,30 +477,32 @@ async function loadGitHubData() {
       .slice(0, 6);
 
     const repoGrid = document.getElementById("repo-grid");
-    repoGrid.innerHTML = topRepos
-      .map((repo) => {
-        const topics = (repo.topics || []).slice(0, 3);
-        const skillSource = [repo.language || "", ...topics].filter(Boolean).join(",");
-        return `
-          <article class="repo-card" data-skills="${skillSource}">
-            <div class="repo-top">
-              <div>
-                <p class="project-label">Repository</p>
-                <h3>${repo.name}</h3>
+    if (repoGrid) {
+      repoGrid.innerHTML = topRepos
+        .map((repo) => {
+          const topics = (repo.topics || []).slice(0, 3);
+          const skillSource = [repo.language || "", ...topics].filter(Boolean).join(",");
+          return `
+            <article class="repo-card" data-skills="${skillSource}">
+              <div class="repo-top">
+                <div>
+                  <p class="project-label">Repository</p>
+                  <h3>${repo.name}</h3>
+                </div>
+                <a href="${repo.html_url}" target="_blank" rel="noreferrer">Open</a>
               </div>
-              <a href="${repo.html_url}" target="_blank" rel="noreferrer">Open</a>
-            </div>
-            <p>${repo.description || "No description provided yet."}</p>
-            <div class="repo-meta">
-              <span>Language: ${repo.language || "Mixed"}</span>
-              <span>Stars: ${formatNumber(repo.stargazers_count)}</span>
-              <span>Updated: ${new Date(repo.pushed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-              <strong>Latest commit surface: ${repo.default_branch}</strong>
-            </div>
-          </article>
-        `;
-      })
-      .join("");
+              <p>${repo.description || "No description provided yet."}</p>
+              <div class="repo-meta">
+                <span>Language: ${repo.language || "Mixed"}</span>
+                <span>Stars: ${formatNumber(repo.stargazers_count)}</span>
+                <span>Updated: ${new Date(repo.pushed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+                <strong>Latest commit surface: ${repo.default_branch}</strong>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+    }
 
     const commitTimelineValues = pushEvents.slice(0, 20).reverse().map((event) => Math.max(1, (event.payload.commits || []).length));
     renderChart(document.getElementById("commit-timeline"), commitTimelineValues.length > 0 ? commitTimelineValues : [1, 1, 2, 3, 2, 2, 4, 3]);
@@ -392,17 +517,21 @@ async function loadGitHubData() {
       "The section falls back to static project links and local content.",
     ]);
     renderChart(document.getElementById("github-commit-chart"), [2, 1, 3, 4, 2, 3, 1, 2]);
-    document.getElementById("repo-grid").innerHTML = `
-      <article class="repo-card">
-        <div class="repo-top">
-          <div>
-            <p class="project-label">Fallback</p>
-            <h3>Repository feed unavailable</h3>
+    renderHeatmap(document.getElementById("github-heatmap"), [0, 1, 2, 1, 3, 0, 1, 4, 2, 1, 0, 2, 3, 1, 2, 0, 1, 1, 3, 4, 2, 1, 0, 1, 3, 2, 1, 0, 2, 4, 3, 1, 1, 2, 0, 1, 3, 4, 2, 1]);
+    const repoGrid = document.getElementById("repo-grid");
+    if (repoGrid) {
+      repoGrid.innerHTML = `
+        <article class="repo-card">
+          <div class="repo-top">
+            <div>
+              <p class="project-label">Fallback</p>
+              <h3>Repository feed unavailable</h3>
+            </div>
           </div>
-        </div>
-        <p>GitHub API access failed from this browser session. Existing project case studies remain available below.</p>
-      </article>
-    `;
+          <p>GitHub API access failed from this browser session. Existing project case studies remain available below.</p>
+        </article>
+      `;
+    }
     renderChart(document.getElementById("commit-timeline"), [1, 3, 2, 4, 2, 1, 2, 3]);
     logDebug("github_error", { message: error.message });
   }
@@ -431,6 +560,20 @@ async function loadCodeforcesData() {
     ]);
 
     renderList(document.getElementById("codeforces-contests"), contests.length > 0 ? contests : ["No recent contests found."]);
+    renderLineChart(
+      document.getElementById("codeforces-rating-chart"),
+      ratings.length > 0 ? ratings.map((contest) => contest.newRating) : [1080, 1135, 1198, 1240, 1305]
+    );
+    const contestHeatValues = Array.from({ length: 60 }, (_, offset) => {
+      const monthOffset = 59 - offset;
+      return ratings.filter((contest) => {
+        const contestDate = new Date(contest.ratingUpdateTimeSeconds * 1000);
+        const bucketDate = new Date();
+        bucketDate.setDate(bucketDate.getDate() - monthOffset);
+        return contestDate.toISOString().slice(0, 10) === bucketDate.toISOString().slice(0, 10);
+      }).length;
+    });
+    renderHeatmap(document.getElementById("codeforces-heatmap"), contestHeatValues.map((value) => toHeatLevel(value, 1)));
     logDebug("codeforces_loaded", { contests: ratings.length });
   } catch (error) {
     renderStats(document.getElementById("codeforces-summary"), [
@@ -443,6 +586,8 @@ async function loadCodeforcesData() {
       "Live Codeforces fetch failed.",
       "Showing local profile snapshot instead.",
     ]);
+    renderLineChart(document.getElementById("codeforces-rating-chart"), [1080, 1135, 1198, 1240, 1305]);
+    renderHeatmap(document.getElementById("codeforces-heatmap"), [0, 0, 1, 0, 2, 0, 0, 1, 0, 3, 0, 1, 0, 0, 2, 0, 1, 0, 4, 0]);
     logDebug("codeforces_error", { message: error.message });
   }
 }
@@ -451,6 +596,8 @@ async function loadLeetCodeData() {
   const summaryContainer = document.getElementById("leetcode-summary");
   const note = document.getElementById("leetcode-note");
   renderHeatmap(document.getElementById("leetcode-heatmap"), fallbackData.leetcode.heatmap);
+  renderLineChart(document.getElementById("leetcode-rating-chart"), fallbackData.leetcode.ratingSeries);
+  renderDifficultyBreakdown(document.getElementById("leetcode-difficulty"), fallbackData.leetcode.difficulty);
 
   try {
     const body = {
@@ -491,6 +638,12 @@ async function loadLeetCodeData() {
     }
 
     const accepted = matchedUser.submitStatsGlobal.acSubmissionNum.find((item) => item.difficulty === "All");
+    const difficultyCounts = matchedUser.submitStatsGlobal.acSubmissionNum
+      .filter((item) => item.difficulty !== "All")
+      .reduce((acc, item) => {
+        acc[item.difficulty] = item.count;
+        return acc;
+      }, {});
     const submissionCalendar = JSON.parse(matchedUser.userCalendar.submissionCalendar || "{}");
     const values = Object.values(submissionCalendar)
       .slice(-56)
@@ -518,7 +671,10 @@ async function loadLeetCodeData() {
     ]);
 
     renderHeatmap(document.getElementById("leetcode-heatmap"), values.length > 0 ? values : fallbackData.leetcode.heatmap);
-    note.textContent = "Live LeetCode data loaded from the profile endpoint.";
+    renderDifficultyBreakdown(document.getElementById("leetcode-difficulty"), difficultyCounts);
+    if (note) {
+      note.textContent = "Live LeetCode data loaded from the profile endpoint.";
+    }
     logDebug("leetcode_loaded", { solved: accepted.count });
   } catch (error) {
     renderStats(summaryContainer, [
@@ -527,9 +683,16 @@ async function loadLeetCodeData() {
       { label: "Status", value: "Snapshot" },
       { label: "Streak", value: `${fallbackData.leetcode.streak} days` },
     ]);
-    note.textContent = fallbackData.leetcode.note;
+    if (note) {
+      note.textContent = fallbackData.leetcode.note;
+    }
     logDebug("leetcode_error", { message: error.message });
   }
+}
+
+function loadCodeChefSnapshot() {
+  renderLineChart(document.getElementById("codechef-rating-chart"), fallbackData.codechef.ratingSeries);
+  renderList(document.getElementById("codechef-contests"), fallbackData.codechef.contests);
 }
 
 function applySkillFilter(skill) {
@@ -550,8 +713,10 @@ function applySkillFilter(skill) {
     });
   });
 
-  status.textContent =
-    skill === "all" ? "Showing all projects and repos." : `Filtering by ${skill}. Matching cards stay emphasized.`;
+  if (status) {
+    status.textContent =
+      skill === "all" ? "Showing all projects and repos." : `Filtering by ${skill}. Matching cards stay emphasized.`;
+  }
   logDebug("skill_filter", { skill });
 }
 
@@ -722,7 +887,7 @@ const terminalCommands = {
 };
 
 function printTerminalLine(text, kind = "terminal-line") {
-  if (!text) {
+  if (!text || !terminalOutput) {
     return;
   }
   const line = document.createElement("div");
@@ -758,51 +923,55 @@ function handleTerminalInput(rawInput) {
   });
 }
 
-shortcutButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    handleTerminalInput(button.dataset.command);
+if (terminalOutput) {
+  shortcutButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      handleTerminalInput(button.dataset.command);
+    });
   });
-});
+}
 
-terminalInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    handleTerminalInput(terminalInput.value);
-    terminalInput.value = "";
-    return;
-  }
-
-  if (event.key === "ArrowUp") {
-    event.preventDefault();
-    if (historyIndex > 0) {
-      historyIndex -= 1;
-      terminalInput.value = terminalHistory[historyIndex];
-    }
-    return;
-  }
-
-  if (event.key === "ArrowDown") {
-    event.preventDefault();
-    if (historyIndex < terminalHistory.length - 1) {
-      historyIndex += 1;
-      terminalInput.value = terminalHistory[historyIndex];
-    } else {
-      historyIndex = terminalHistory.length;
+if (terminalInput) {
+  terminalInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      handleTerminalInput(terminalInput.value);
       terminalInput.value = "";
+      return;
     }
-    return;
-  }
 
-  if (event.key === "Tab") {
-    event.preventDefault();
-    const current = terminalInput.value.trim();
-    const matches = Object.keys(terminalCommands).filter((name) => name.startsWith(current));
-    if (matches.length === 1) {
-      terminalInput.value = matches[0];
-    } else if (matches.length > 1) {
-      printTerminalLine(matches.join("  "), "terminal-line info");
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (historyIndex > 0) {
+        historyIndex -= 1;
+        terminalInput.value = terminalHistory[historyIndex];
+      }
+      return;
     }
-  }
-});
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      if (historyIndex < terminalHistory.length - 1) {
+        historyIndex += 1;
+        terminalInput.value = terminalHistory[historyIndex];
+      } else {
+        historyIndex = terminalHistory.length;
+        terminalInput.value = "";
+      }
+      return;
+    }
+
+    if (event.key === "Tab") {
+      event.preventDefault();
+      const current = terminalInput.value.trim();
+      const matches = Object.keys(terminalCommands).filter((name) => name.startsWith(current));
+      if (matches.length === 1) {
+        terminalInput.value = matches[0];
+      } else if (matches.length > 1) {
+        printTerminalLine(matches.join("  "), "terminal-line info");
+      }
+    }
+  });
+}
 
 [
   "Interactive terminal ready.",
@@ -811,11 +980,14 @@ terminalInput.addEventListener("keydown", (event) => {
 ].forEach((line) => printTerminalLine(line, "terminal-line success"));
 
 const matrixCanvas = document.getElementById("matrixCanvas");
-const matrixContext = matrixCanvas.getContext("2d");
+const matrixContext = matrixCanvas ? matrixCanvas.getContext("2d") : null;
 let matrixColumns = [];
 let matrixActive = false;
 
 function resizeMatrix() {
+  if (!matrixCanvas || !matrixContext) {
+    return;
+  }
   matrixCanvas.width = window.innerWidth * window.devicePixelRatio;
   matrixCanvas.height = window.innerHeight * window.devicePixelRatio;
   matrixCanvas.style.width = `${window.innerWidth}px`;
@@ -827,6 +999,9 @@ function resizeMatrix() {
 }
 
 function drawMatrix() {
+  if (!matrixCanvas || !matrixContext) {
+    return;
+  }
   if (matrixActive) {
     matrixContext.fillStyle = "rgba(5, 5, 5, 0.18)";
     matrixContext.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -852,9 +1027,89 @@ function toggleMatrixMode() {
   logDebug("matrix_toggle", { active: matrixActive });
 }
 
-window.addEventListener("resize", resizeMatrix);
-resizeMatrix();
-drawMatrix();
+if (matrixCanvas && matrixContext) {
+  window.addEventListener("resize", resizeMatrix);
+  resizeMatrix();
+  drawMatrix();
+}
+
+function initShippingMotion() {
+  const motion = document.getElementById("ship-motion");
+  if (motion) {
+    motion.innerHTML = Array.from({ length: 4 }, (_, laneIndex) => {
+      const nodes = Array.from({ length: 3 }, (_, nodeIndex) => {
+        const width = 18 + ((laneIndex + nodeIndex) % 3) * 10;
+        const delay = -1 * (laneIndex * 0.8 + nodeIndex * 1.25);
+        return `<span class="motion-node" style="left:${nodeIndex * 18}%; width:${width}%; animation-delay:${delay}s"></span>`;
+      }).join("");
+      return `<div class="motion-lane">${nodes}</div>`;
+    }).join("");
+  }
+
+  renderChart(document.getElementById("commit-timeline"), [1, 2, 1, 4, 2, 3, 5, 3, 2, 4, 3, 6, 4, 5]);
+}
+
+const fractalCanvas = document.getElementById("fractalCanvas");
+const fractalContext = fractalCanvas ? fractalCanvas.getContext("2d") : null;
+let fractalWidth = 0;
+let fractalHeight = 0;
+let fractalTime = 0;
+
+function resizeFractalCanvas() {
+  if (!fractalCanvas || !fractalContext) {
+    return;
+  }
+
+  fractalWidth = window.innerWidth;
+  fractalHeight = window.innerHeight;
+  fractalCanvas.width = fractalWidth * window.devicePixelRatio;
+  fractalCanvas.height = fractalHeight * window.devicePixelRatio;
+  fractalCanvas.style.width = `${fractalWidth}px`;
+  fractalCanvas.style.height = `${fractalHeight}px`;
+  fractalContext.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+}
+
+function drawFractalBranch(x, y, length, angle, depth) {
+  if (!fractalContext || depth <= 0) {
+    return;
+  }
+
+  const endX = x + Math.cos(angle) * length;
+  const endY = y + Math.sin(angle) * length;
+  const alpha = Math.max(0.035, depth * 0.018);
+
+  fractalContext.strokeStyle = `rgba(0, 255, 136, ${alpha})`;
+  fractalContext.lineWidth = Math.max(0.6, depth * 0.22);
+  fractalContext.beginPath();
+  fractalContext.moveTo(x, y);
+  fractalContext.lineTo(endX, endY);
+  fractalContext.stroke();
+
+  const drift = Math.sin(fractalTime * 0.012 + depth) * 0.11;
+  drawFractalBranch(endX, endY, length * 0.72, angle - 0.55 + drift, depth - 1);
+  drawFractalBranch(endX, endY, length * 0.72, angle + 0.55 - drift, depth - 1);
+}
+
+function drawFractalLayer() {
+  if (!fractalCanvas || !fractalContext) {
+    return;
+  }
+
+  fractalTime += 1;
+  fractalContext.clearRect(0, 0, fractalWidth, fractalHeight);
+  fractalContext.save();
+  fractalContext.globalCompositeOperation = "lighter";
+  drawFractalBranch(fractalWidth * 0.08, fractalHeight * 0.78, Math.min(fractalWidth, fractalHeight) * 0.13, -1.1, 8);
+  drawFractalBranch(fractalWidth * 0.92, fractalHeight * 0.24, Math.min(fractalWidth, fractalHeight) * 0.1, 2.2, 7);
+  fractalContext.restore();
+  requestAnimationFrame(drawFractalLayer);
+}
+
+if (fractalCanvas && fractalContext) {
+  window.addEventListener("resize", resizeFractalCanvas);
+  resizeFractalCanvas();
+  drawFractalLayer();
+}
 
 const konamiKeys = [
   "ArrowUp",
@@ -885,6 +1140,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 async function bootstrap() {
+  initShippingMotion();
+  loadCodeChefSnapshot();
   await Promise.all([loadGitHubData(), loadCodeforcesData(), loadLeetCodeData()]);
   applySkillFilter("all");
 }

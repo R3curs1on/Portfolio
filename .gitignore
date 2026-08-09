@@ -1,0 +1,16 @@
+.codex
+
+.vscode/
+
+*.tmp
+*.temp
+
+.env
+.env.*
+
+ 
+_site/
+.jekyll-cache/
+.sass-cache/
+ 
+*.log
